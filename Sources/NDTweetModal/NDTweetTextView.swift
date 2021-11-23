@@ -110,7 +110,6 @@ public final class NDTweetTextView: UITextView {
     }
     
     @objc private func textDidChanged() {
-        print(#function, text)
         let shouldHidden = self.placeHolder.isEmpty || !self.text.isEmpty
         self.placeHolderLabel.alpha = shouldHidden ? 0 : 1
         decorateHashTag()
