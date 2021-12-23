@@ -137,15 +137,17 @@ public final class NDTweetTextView: UITextView {
                 // Emojiはサロゲートペアを含む
                 // このため、Emojiを含んだ正規表現でのNSRangeの長さは[String.utf16.count]を使用する
                 let range = NSRange(location: 0, length: self.text.utf16.count)
-                let regix = try NSRegularExpression(pattern: "(?:^|\\s)(#([^\\s]+))[^\\s]?", options: .anchorsMatchLines)
+                let regix = try NSRegularExpression(pattern: "(?:^|\\s)((#|@)([^\\s]+))[^\\s]?", options: .anchorsMatchLines)
                 let matcher = regix.matches(in: self.text, options: .withTransparentBounds, range: range)
 
                 // 前回設定していたハッシュタグ用の文字装飾を除去する
-//                attrString.removeAttribute(.foregroundColor, range: range)
-//                attrString.removeAttribute(.underlineStyle, range: range)
+                attrString.removeAttribute(.foregroundColor, range: range)
+                attrString.removeAttribute(.underlineStyle, range: range)
 
                 let results = matcher.compactMap { (tagRange: $0.range(at: 1), contentRange: $0.range(at: 2)) }
                 let nsString = NSString(string: self.text)
+                attrString.addAttributes([.foregroundColor: UIColor.white], range: range)
+                
                 for result in results {
                     let content = nsString.substring(with: result.contentRange)
                     if !content.isOnlySupportedHashTag {
